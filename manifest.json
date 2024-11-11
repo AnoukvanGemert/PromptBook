@@ -11,7 +11,7 @@
         "*://*.chatgpt.com/*"
     ],
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "../FRONTEND/HTML/popup.html"
     },
     "background": {
         "service_worker": "./FRONTEND/JS/background.js"
