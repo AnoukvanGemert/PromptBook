@@ -1,13 +1,12 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "insertPrompt") {
-        insertPrompt(request.prompt);
+document.addEventListener("DOMContentLoaded", function() {
+    const prompt = "Your custom prompt text goes here";
+
+    const chatInput = document.querySelector("textarea"); 
+
+    if (chatInput) {
+        chatInput.value = prompt;
+        chatInput.dispatchEvent(new Event("input", { bubbles: true }));
+    } else {
+        console.warn("ChatGPT input field not found.");
     }
 });
-
-function insertPrompt(promptText) {
-    const inputId = document.getElementById("prompt-textarea")
-    if (inputId) {
-        inputId.value = promptText;
-        inputId.focus();
-    }
-}
