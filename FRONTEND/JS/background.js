@@ -1,1 +1,1 @@
-console.log("My Promptbook extension loaded in background.");
+alert("The test extension is up and running")

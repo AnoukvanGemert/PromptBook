@@ -3,10 +3,7 @@
     "name": "My Promptbook",
     "version": "1.0",
     "description": "A Chrome extension to inject prompt templates on chatgpt.com.",
-    "permissions": [
-        "activeTab",
-        "scripting"
-    ],
+    "permissions": ["activeTab", "scripting"],
     "host_permissions": [
         "*://*.chatgpt.com/*"
     ],

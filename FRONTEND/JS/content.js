@@ -1,13 +1,9 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "insertPrompt") {
-        insertPrompt(request.prompt);
-    }
+document.getElementById("sendMessage").addEventListener("click", async () => {
+    const message = document.getElementById("EXT").value;
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: sendMessageToChatGPT,
+        args: [message]
+    });
 });
-
-function insertPrompt(promptText) {
-    const inputId = document.getElementById("prompt-textarea")
-    if (inputId) {
-        inputId.value = promptText;
-        inputId.focus();
-    }
-}
