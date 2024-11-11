@@ -3,9 +3,9 @@
     "name_for_model": "MyPromptbook",
     "name_for_human": "My Promptbook",
     "app_scope": "personal",
-    "scripts": ["./JS/background.js"],
-    "matches": ["*://*.example.com/*"], 
-    "js": ["content.js"],
+    "scripts": ["./FRONTEND/JS/background.js"],
+    "matches": ["*://*.chatgpt.com*"], 
+    "js": ["./FRONTEND/JS/content.js"],
     "auth": {
         "type": "none"
     },
