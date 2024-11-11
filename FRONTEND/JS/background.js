@@ -1,0 +1,1 @@
+console.log("My Promptbook extension loaded in background.");
