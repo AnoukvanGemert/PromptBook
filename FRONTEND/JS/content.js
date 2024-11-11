@@ -5,9 +5,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function insertPrompt(promptText) {
-    const chatInput = document.querySelector("textarea");
-    if (chatInput) {
-        chatInput.value = promptText;
-        chatInput.focus();
+    const inputId = document.getElementById("prompt-textarea")
+    if (inputId) {
+        inputId.value = promptText;
+        inputId.focus();
     }
 }
