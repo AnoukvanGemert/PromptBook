@@ -1,0 +1,32 @@
+{
+    "schema_version": "v1",
+    "name_for_model": "MyPromptbook",
+    "name_for_human": "My Promptbook",
+    "app_scope": "personal",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "none"
+    },
+    "prompt_templates": [
+        {
+            "title": "Greeting Prompt",
+            "prompt": "Start the conversation with a friendly greeting and ask how the user's day is going."
+        },
+        {
+            "title": "Advice Prompt",
+            "prompt": "Ask the user if they need advice on any specific topic and provide a supportive response."
+        },
+        {
+            "title": "Question Prompt",
+            "prompt": "Encourage the user to ask any questions they might have about a given topic."
+        }
+    ],
+    "tags": [
+        "promptbook",
+        "local",
+        "templates",
+        "conversation"
+    ]
+}
