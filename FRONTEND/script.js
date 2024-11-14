@@ -12,27 +12,18 @@ async function pull() {
     return await json;
 }
 
-promptTextarea.addEventListener('keyup', (event) => {
-    if (event.key == 'Enter') {
-        if (promptTextarea.value === "\n") {
-            alert('Fill in your prompt');
-            event.preventDefault();
-            promptTextarea.value = '';
-        } else {
-            event.preventDefault();
-            const data = JSON.parse(localStorage.getItem('promptList')) || [];
-            data.push(promptTextarea.value);
-            localStorage.setItem('promptList', JSON.stringify(data));
-            ulPrompts.innerHTML = '';
-            data.forEach(prompt => {
-                const li = document.createElement('li');
-                li.style.listStyleType = 'none'
-                li.textContent = prompt;
-                ulPrompts.appendChild(li);
-            });
-            promptTextarea.value = '';
-        }
-    }
+saveButton.addEventListener('click', () => {
+    const li = document.createElement('li');
+    li.style.listStyleType = 'none';
+    li.innerHTML = promptTextarea.value;
+    promptTextarea.value = '';
+    ulPrompts.appendChild(li);
+    // data.forEach(prompt => {
+    //     const li = document.createElement('li');
+    //     li.style.listStyleType = 'none'
+    //     li.textContent = prompt;
+    //     ulPrompts.appendChild(li);
+    // });
 });
 
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
@@ -53,55 +44,20 @@ askButton.addEventListener('click', () => {
     window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
 });
 
-promptTextarea.addEventListener('keyup', (event) => {
-    if (event.key == 'Enter') {
-        if (promptTextarea.value === "\n") {
-            alert('Fill in your prompt');
-            event.preventDefault();
-            promptTextarea.value = '';
-        } else {
-            event.preventDefault();
-            const data = JSON.parse(localStorage.getItem('promptList')) || [];
-            data.push(promptTextarea.value);
-            localStorage.setItem('promptList', JSON.stringify(data));
-            ulPrompts.innerHTML = '';
-            data.forEach(prompt => {
-                const li = document.createElement('li');
-                li.style.listStyleType = 'none';
-                li.textContent = prompt;
-                ulPrompts.appendChild(li);
-            });
-            promptTextarea.value = '';
-        }
-    }
-});
-
-function displayPromptChats() {
-    input.addEventListener('keyup', (event) => {
-        if (event.key == 'Enter') {
-            const li = document.createElement('li');
-            li.innerHTML = input.value;
-            outputLinks.innerHTML = input.value;
-            outputLinks.appendChild(li);
-            localStorage.setItem('link', JSON.stringify(outputLinks));
-        }
-    });
-}
-
 function fetchCategorizedPrompts() {
     fetch('/BACKEND/api/categorizedPromps.json')
-    .then((res) => {
-        if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-    })
-    .then(data => {
-        displayCategorizedPrompts(data.prompts);
-    })
-    .catch((error) => {
-        console.log("Unable to fetch data:", error);
-    });
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            displayCategorizedPrompts(data.prompts);
+        })
+        .catch((error) => {
+            console.log("Unable to fetch data:", error);
+        });
 }
 
 
@@ -119,7 +75,7 @@ function displayCategorizedPrompts(prompts) {
 
     const categorySelect = document.getElementById('categorySelect');
     const uniqueCategories = getUniqueCategories(prompts);
-    
+
     uniqueCategories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
@@ -129,7 +85,7 @@ function displayCategorizedPrompts(prompts) {
     });
 
     const table = document.createElement('table');
-    table.classList.add('table-auto', 'w-full', "border-collapse", "border", 'border-slate-500');  
+    table.classList.add('table-auto', 'w-full', "border-collapse", "border", 'border-slate-500');
 
     const headerRow = document.createElement('tr');
     headerRow.classList.add('text-xl', "text-gray-500", "bg-gray-50");
@@ -145,9 +101,9 @@ function displayCategorizedPrompts(prompts) {
 
     prompts.forEach(prompt => {
         const row = document.createElement('tr');
-        row.classList.add('bg-gray-100' , 'hover:bg-gray-200');
-        
-        row.setAttribute('data-category', prompt.category);  
+        row.classList.add('bg-gray-100', 'hover:bg-gray-200');
+
+        row.setAttribute('data-category', prompt.category);
 
         row.innerHTML = `
             <td class="border border-slate-600 px-6 py-4 text-gray-500"> 
@@ -174,16 +130,16 @@ function filterByCategory(prompts, category) {
     const rows = document.querySelectorAll('tr[data-category]');
     rows.forEach(row => {
         if (category === "" || row.getAttribute('data-category').toLowerCase() === category.toLowerCase()) {
-            row.style.display = '';  
+            row.style.display = '';
         } else {
-            row.style.display = 'none';  
+            row.style.display = 'none';
         }
     });
 }
 
 function getUniqueCategories(prompts) {
     const categories = prompts.map(prompt => prompt.category);
-    return [...new Set(categories)]; 
+    return [...new Set(categories)];
 }
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
@@ -236,36 +192,8 @@ randomPrompt.addEventListener('click', () => {
     }
 
     promptTextarea.value = getComplexPrompt();
-    
+
 });
-
-promptTextarea.addEventListener('keyup', (event) => {
-    if (event.key == 'Enter') {
-        if (promptTextarea.value === "\n") {
-            alert('Fill in your prompt');
-            event.preventDefault();
-            promptTextarea.value = '';
-        } else {
-            event.preventDefault();
-            const data = JSON.parse(localStorage.getItem('promptList')) || [];
-            data.push(promptTextarea.value);
-            localStorage.setItem('promptList', JSON.stringify(data));
-            ulPrompts.innerHTML = '';
-            data.forEach(prompt => {
-                const li = document.createElement('li');
-                li.style.listStyleType = 'none'
-                li.textContent = prompt;
-                ulPrompts.appendChild(li);
-            });
-            promptTextarea.value = '';
-        }
-    }
-});
-
-
-
-
-
 
 // Ties zijn code
 saveButton.addEventListener('click', async () => {
@@ -314,6 +242,4 @@ saveButton.addEventListener('click', async () => {
 
 saveButton.addEventListener('click', savePrompt);
 
-fetchCategorizedPrompts()
-displayPromptChats();
-
+fetchCategorizedPrompts();
