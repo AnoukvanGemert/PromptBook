@@ -181,34 +181,6 @@ function getUniqueCategories(prompts) {
     const categories = prompts.map(prompt => prompt.category);
     return [...new Set(categories)]; 
 }
-
-saveButton.addEventListener('click', savePrompt);
-
-fetchCategorizedPrompts()
-displayPromptChats();
-promptTextarea.addEventListener('keyup', (event) => {
-    if (event.key == 'Enter') {
-        if (promptTextarea.value === "\n") {
-            alert('Fill in your prompt');
-            event.preventDefault();
-            promptTextarea.value = '';
-        } else {
-            event.preventDefault();
-            const data = JSON.parse(localStorage.getItem('promptList')) || [];
-            data.push(promptTextarea.value);
-            localStorage.setItem('promptList', JSON.stringify(data));
-            ulPrompts.innerHTML = '';
-            data.forEach(prompt => {
-                const li = document.createElement('li');
-                li.style.listStyleType = 'none'
-                li.textContent = prompt;
-                ulPrompts.appendChild(li);
-            });
-            promptTextarea.textContent = '';
-        }
-    }
-});
-
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
     const wat = ["discovers", "explores", "solves", "destroys", "creates", "invents"];
@@ -262,6 +234,33 @@ randomPrompt.addEventListener('click', () => {
     promptTextarea.textContent = getComplexPrompt();
 });
 
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        if (promptTextarea.value === "\n") {
+            alert('Fill in your prompt');
+            event.preventDefault();
+            promptTextarea.value = '';
+        } else {
+            event.preventDefault();
+            const data = JSON.parse(localStorage.getItem('promptList')) || [];
+            data.push(promptTextarea.value);
+            localStorage.setItem('promptList', JSON.stringify(data));
+            ulPrompts.innerHTML = '';
+            data.forEach(prompt => {
+                const li = document.createElement('li');
+                li.style.listStyleType = 'none'
+                li.textContent = prompt;
+                ulPrompts.appendChild(li);
+            });
+            promptTextarea.textContent = '';
+        }
+    }
+});
+
+
+
+
+
 
 // Ties zijn code
 saveButton.addEventListener('click', async () => {
@@ -307,3 +306,9 @@ saveButton.addEventListener('click', async () => {
             console.log('Success:', data);
         });
 });
+
+saveButton.addEventListener('click', savePrompt);
+
+fetchCategorizedPrompts()
+displayPromptChats();
+
