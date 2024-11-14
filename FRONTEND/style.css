@@ -3,13 +3,14 @@
     padding: 0;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-decoration: none;
+    box-sizing: border-box;
     color: black;
 }
 
 body {
     background-color: aliceblue;
     display: flex;
-    width: 200vw;
+    width: 100vw;
 }
 
 .container {
@@ -79,4 +80,56 @@ form * {
     font-size: 23px;
     border: none;
     outline: none;
+}
+
+.container-progress {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.prompt {
+    text-align: center;
+    font-size: 22px;
+    padding: 14px;
+    width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background-color: aqua;
+}
+
+path {
+    background-color: yellow;
+}
+
+button:first-child {
+    display: flex;
+    border: none;
+    justify-content: center;
+    background-color: aquamarine;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 22px;
+    padding: 20px;
+}
+
+.container-progress {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+
+.bookmark {
+    border: none;
+    background-color: aqua;
+}
+
+.input {
+    border: 1px black solid;
+    height: 100%;
+    width: 92%;
+    background-color: aqua;
 }
