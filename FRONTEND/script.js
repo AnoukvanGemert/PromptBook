@@ -12,6 +12,29 @@ async function pull() {
     return await json;
 }
 
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        if (promptTextarea.value === "\n") {
+            alert('Fill in your prompt');
+            event.preventDefault();
+            promptTextarea.value = '';
+        } else {
+            event.preventDefault();
+            const data = JSON.parse(localStorage.getItem('promptList')) || [];
+            data.push(promptTextarea.value);
+            localStorage.setItem('promptList', JSON.stringify(data));
+            ulPrompts.innerHTML = '';
+            data.forEach(prompt => {
+                const li = document.createElement('li');
+                li.style.listStyleType = 'none'
+                li.textContent = prompt;
+                ulPrompts.appendChild(li);
+            });
+            promptTextarea.value = '';
+        }
+    }
+});
+
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
     .then(response => response.json())
     .then(promptData => {
@@ -44,7 +67,7 @@ promptTextarea.addEventListener('keyup', (event) => {
             ulPrompts.innerHTML = '';
             data.forEach(prompt => {
                 const li = document.createElement('li');
-                li.style.listStyleType = 'none'
+                li.style.listStyleType = 'none';
                 li.textContent = prompt;
                 ulPrompts.appendChild(li);
             });
@@ -63,48 +86,6 @@ function displayPromptChats() {
             localStorage.setItem('link', JSON.stringify(outputLinks));
         }
     });
-}
-
-async function savePrompt() {
-    try {
-        const newPrompt = await fetch('http://localhost:8000/composite_prompts', {
-            method: 'POST',
-            body: JSON.stringify({
-                "author_id": 1,
-                "title": "New Prompt",
-                "description": "default description"
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json());
-
-        const newFragment = await fetch('http://localhost:8000/prompt_fragments', {
-            method: 'POST',
-            body: JSON.stringify({
-                "author_id": 1,
-                "content": promptTextarea.value,
-                "description": "default description fragment",
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json());
-
-        await fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                "order_index": 0
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        console.log('New prompt and fragment saved successfully');
-    } catch (error) {
-        console.error('Error saving new prompt or fragment:', error);
-    }
 }
 
 function fetchCategorizedPrompts() {
@@ -256,34 +237,6 @@ randomPrompt.addEventListener('click', () => {
 
     promptTextarea.textContent = getComplexPrompt();
 });
-
-promptTextarea.addEventListener('keyup', (event) => {
-    if (event.key == 'Enter') {
-        if (promptTextarea.value === "\n") {
-            alert('Fill in your prompt');
-            event.preventDefault();
-            promptTextarea.value = '';
-        } else {
-            event.preventDefault();
-            const data = JSON.parse(localStorage.getItem('promptList')) || [];
-            data.push(promptTextarea.value);
-            localStorage.setItem('promptList', JSON.stringify(data));
-            ulPrompts.innerHTML = '';
-            data.forEach(prompt => {
-                const li = document.createElement('li');
-                li.style.listStyleType = 'none'
-                li.textContent = prompt;
-                ulPrompts.appendChild(li);
-            });
-            promptTextarea.textContent = '';
-        }
-    }
-});
-
-
-
-
-
 
 // Ties zijn code
 saveButton.addEventListener('click', async () => {
