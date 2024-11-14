@@ -6,6 +6,12 @@ const saveButton = document.getElementById('saveNewPrompt');
 const randomPrompt = document.getElementById('createRandomPrompt');
 const promptlist = document.getElementById('promptlist');
 
+async function pull() {
+    const data = await fetch('data.json');
+    const json  = data.json();
+    return await json;
+}
+
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
     .then(response => response.json())
     .then(promptData => {
@@ -30,6 +36,7 @@ promptTextarea.addEventListener('keyup', (event) => {
         data.push(promptTextarea.value);
         localStorage.setItem('promptList', JSON.stringify(data));
     }
+
 });
 
 randomPrompt.addEventListener('click', () => {
