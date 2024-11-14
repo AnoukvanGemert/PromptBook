@@ -53,6 +53,157 @@ promptTextarea.addEventListener('keyup', (event) => {
     }
 });
 
+function displayPromptChats() {
+    input.addEventListener('keyup', (event) => {
+        if (event.key == 'Enter') {
+            const li = document.createElement('li');
+            li.innerHTML = input.value;
+            outputLinks.innerHTML = input.value;
+            outputLinks.appendChild(li);
+            localStorage.setItem('link', JSON.stringify(outputLinks));
+        }
+    });
+}
+
+async function savePrompt() {
+    try {
+        const newPrompt = await fetch('http://localhost:8000/composite_prompts', {
+            method: 'POST',
+            body: JSON.stringify({
+                "author_id": 1,
+                "title": "New Prompt",
+                "description": "default description"
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json());
+
+        const newFragment = await fetch('http://localhost:8000/prompt_fragments', {
+            method: 'POST',
+            body: JSON.stringify({
+                "author_id": 1,
+                "content": promptTextarea.value,
+                "description": "default description fragment",
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json());
+
+        await fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                "order_index": 0
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        console.log('New prompt and fragment saved successfully');
+    } catch (error) {
+        console.error('Error saving new prompt or fragment:', error);
+    }
+}
+
+function fetchCategorizedPrompts() {
+    fetch('/BACKEND/api/categorizedPromps.json')
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+    })
+    .then(data => {
+        displayCategorizedPrompts(data.prompts);
+    })
+    .catch((error) => {
+        console.log("Unable to fetch data:", error);
+    });
+}
+
+
+function copyToClipboard(value) {
+    navigator.clipboard.writeText(value).then(() => {
+        alert(`The text "${value}" has been copied to your clipboard!`);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+function displayCategorizedPrompts(prompts) {
+    const showPrompts = document.getElementById('showCategorized');
+    showPrompts.innerHTML = "";
+
+    const categorySelect = document.getElementById('categorySelect');
+    const uniqueCategories = getUniqueCategories(prompts);
+    
+    uniqueCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        option.classList.add('text-gray-500')
+        categorySelect.appendChild(option);
+    });
+
+    const table = document.createElement('table');
+    table.classList.add('table-auto', 'w-full', "border-collapse", "border", 'border-slate-500');  
+
+    const headerRow = document.createElement('tr');
+    headerRow.classList.add('text-xl', "text-gray-500", "bg-gray-50");
+
+    headerRow.innerHTML = `
+        <thead>
+            <th class="w-[70%] border border-slate-600 px-6 py-3 ">Content</th>
+            <th class="w-[15%] border border-slate-600  px-6 py-3">Category</th>
+            <th class="w-[15%] border border-slate-600  px-6 py-3">Genre</th>
+        </thead>
+    `;
+    table.appendChild(headerRow);
+
+    prompts.forEach(prompt => {
+        const row = document.createElement('tr');
+        row.classList.add('bg-gray-100' , 'hover:bg-gray-200');
+        
+        row.setAttribute('data-category', prompt.category);  
+
+        row.innerHTML = `
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> 
+                <div class='text-gray-500 flex justify-between'>
+                    <p class='text-gray-500 w-[80%]' id="textContent">${prompt.content}</p>
+                    <button onclick="copyToClipboard('${prompt.content}')" class="hover:text-gray-700 hover:underline">Copy text</button>
+                </div>
+            </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> ${prompt.category} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> ${prompt.genre} </td>
+        `;
+        table.appendChild(row);
+    });
+
+    showPrompts.appendChild(table);
+
+    categorySelect.addEventListener('change', (e) => {
+        const selectedCategory = e.target.value;
+        filterByCategory(prompts, selectedCategory);
+    });
+}
+
+function filterByCategory(prompts, category) {
+    const rows = document.querySelectorAll('tr[data-category]');
+    rows.forEach(row => {
+        if (category === "" || row.getAttribute('data-category').toLowerCase() === category.toLowerCase()) {
+            row.style.display = '';  
+        } else {
+            row.style.display = 'none';  
+        }
+    });
+}
+
+function getUniqueCategories(prompts) {
+    const categories = prompts.map(prompt => prompt.category);
+    return [...new Set(categories)]; 
+}
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
     const wat = ["discovers", "explores", "solves", "destroys", "creates", "invents"];
@@ -106,6 +257,33 @@ randomPrompt.addEventListener('click', () => {
     promptTextarea.textContent = getComplexPrompt();
 });
 
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        if (promptTextarea.value === "\n") {
+            alert('Fill in your prompt');
+            event.preventDefault();
+            promptTextarea.value = '';
+        } else {
+            event.preventDefault();
+            const data = JSON.parse(localStorage.getItem('promptList')) || [];
+            data.push(promptTextarea.value);
+            localStorage.setItem('promptList', JSON.stringify(data));
+            ulPrompts.innerHTML = '';
+            data.forEach(prompt => {
+                const li = document.createElement('li');
+                li.style.listStyleType = 'none'
+                li.textContent = prompt;
+                ulPrompts.appendChild(li);
+            });
+            promptTextarea.textContent = '';
+        }
+    }
+});
+
+
+
+
+
 
 // Ties zijn code
 saveButton.addEventListener('click', async () => {
@@ -151,3 +329,9 @@ saveButton.addEventListener('click', async () => {
             console.log('Success:', data);
         });
 });
+
+saveButton.addEventListener('click', savePrompt);
+
+fetchCategorizedPrompts()
+displayPromptChats();
+
