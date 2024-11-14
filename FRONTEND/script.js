@@ -3,6 +3,7 @@ const promptTitleElement = document.getElementById('prompt-title');
 const promptTextarea = document.getElementById('prompt');
 const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
+const randomPrompt = document.getElementById('createRandomPrompt');
 
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
     .then(response => response.json())
