@@ -4,6 +4,7 @@ const promptTextarea = document.getElementById('prompt');
 const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
 const randomPrompt = document.getElementById('createRandomPrompt');
+const promptlist = document.getElementById('promptlist');
 
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
     .then(response => response.json())
@@ -22,6 +23,17 @@ fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
 askButton.addEventListener('click', () => {
     window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
 });
+
+function allPrompts() {
+    promptTextarea.addEventListener('keyup', (event) => {
+        if (event.key == 'Enter') {
+            const li = document.createElement('li');
+            promptTextarea.value = li.innerHTML;
+            promptlist.appendChild(li);
+            promptTextarea.value = '';
+        }
+    });
+}
 
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
@@ -76,6 +88,8 @@ randomPrompt.addEventListener('click', () => {
     promptTextarea.textContent = getComplexPrompt();
 });
 
+
+// Ties zijn code
 saveButton.addEventListener('click', async () => {
     const newPrompt = await fetch(`http://localhost:8000/composite_prompts`, {
         method: 'POST',
