@@ -5,44 +5,32 @@ const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
 const randomPrompt = document.getElementById('createRandomPrompt');
 const ulPrompts = document.getElementById('ulPrompts');
+const date = new Date();
+const time = date.toTimeString();
+const day = date.getDay();
 
-async function pull() {
-    const data = await fetch('data.json');
-    const json = data.json();
-    return await json;
-}
+function saving(prompts) {
+    saveButton.addEventListener('click', () => {
+        const table = document.getElementById('rowPrompt');
+        const li = document.createElement('li');
+        li.style.listStyleType = 'none';
+        li.innerHTML = promptTextarea.value;
+        promptTextarea.value = '';
+        prompts.forEach(prompt => {
+            li.setAttribute('data-category', prompt.category);
 
-saveButton.addEventListener('click', () => {
-    const li = document.createElement('li');
-    li.style.listStyleType = 'none';
-    li.innerHTML = promptTextarea.value;
-    promptTextarea.value = '';
-    ulPrompts.appendChild(li);
-    // data.forEach(prompt => {
-    //     const li = document.createElement('li');
-    //     li.style.listStyleType = 'none'
-    //     li.textContent = prompt;
-    //     ulPrompts.appendChild(li);
-    // });
-});
-
-fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
-    .then(response => response.json())
-    .then(promptData => {
-        promptTitleElement.innerText = promptData.title;
-        let promptText = '';
-        promptData.fragments.forEach(fragment => {
-            promptText += fragment.content + '\n\n';
+            li.innerHTML = `
+            <p> 
+                <div>
+                    <p id="textContent">${prompt.content}  ${prompt.category}  ${prompt.genre}</p>
+                </div>
+            </p>
+        `;
+            table.appendChild(li);
         });
-        promptTextarea.value = promptText;
-    })
-    .catch(error => {
-        console.error('Error fetching prompt data:', error);
+        ulPrompts.appendChild(li);
     });
-
-askButton.addEventListener('click', () => {
-    window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
-});
+}
 
 function fetchCategorizedPrompts() {
     fetch('/BACKEND/api/categorizedPromps.json')
@@ -54,6 +42,7 @@ function fetchCategorizedPrompts() {
         })
         .then(data => {
             displayCategorizedPrompts(data.prompts);
+            saving(data.prompts)
         })
         .catch((error) => {
             console.log("Unable to fetch data:", error);
@@ -102,6 +91,7 @@ function displayCategorizedPrompts(prompts) {
     prompts.forEach(prompt => {
         const row = document.createElement('tr');
         row.classList.add('bg-gray-100', 'hover:bg-gray-200');
+        table.setAttribute('id', 'rowPrompt');
 
         row.setAttribute('data-category', prompt.category);
 
@@ -195,51 +185,6 @@ randomPrompt.addEventListener('click', () => {
 
 });
 
-// Ties zijn code
-saveButton.addEventListener('click', async () => {
-    const newPrompt = await fetch(`http://localhost:8000/composite_prompts`, {
-        method: 'POST',
-        body: JSON.stringify({
-            "author_id": 1,
-            "title": "New Prompt",
-            "description": "default description"
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            return data;
-        });
-    const newFragment = await fetch(`http://localhost:8000/prompt_fragments`, {
-        method: 'POST',
-        body: JSON.stringify({
-            "author_id": 1,
-            "content": promptTextarea.value,
-            "description": "default description fragment",
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            return data
-        });
-
-    askButton.addEventListener('click', () => {
-        window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
-    });
-
-    fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
-        method: 'POST',
-        body: JSON.stringify({
-            "order_index": 0
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        });
-});
-
-saveButton.addEventListener('click', savePrompt);
+// Ties zijn code is nu tijdelijk weg
 
 fetchCategorizedPrompts();
