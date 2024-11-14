@@ -243,6 +243,6 @@ saveButton.addEventListener('click', async () => {
         });
 });
 
-saveButton.addEventListener('click', savePrompt);
+
 
 fetchCategorizedPrompts();
