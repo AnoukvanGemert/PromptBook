@@ -235,8 +235,37 @@ randomPrompt.addEventListener('click', () => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    promptTextarea.textContent = getComplexPrompt();
+    promptTextarea.value = getComplexPrompt();
+    
 });
+
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        if (promptTextarea.value === "\n") {
+            alert('Fill in your prompt');
+            event.preventDefault();
+            promptTextarea.value = '';
+        } else {
+            event.preventDefault();
+            const data = JSON.parse(localStorage.getItem('promptList')) || [];
+            data.push(promptTextarea.value);
+            localStorage.setItem('promptList', JSON.stringify(data));
+            ulPrompts.innerHTML = '';
+            data.forEach(prompt => {
+                const li = document.createElement('li');
+                li.style.listStyleType = 'none'
+                li.textContent = prompt;
+                ulPrompts.appendChild(li);
+            });
+            promptTextarea.value = '';
+        }
+    }
+});
+
+
+
+
+
 
 // Ties zijn code
 saveButton.addEventListener('click', async () => {
