@@ -26,7 +26,7 @@ askButton.addEventListener('click', () => {
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
     const wat = ["discovers", "explores", "solves", "destroys", "creates", "invents"];
-    const plek = ["a hidden cave", "an ancient city", "a faraway planet", "a parallel universe", "a dystopian future"];
+    const plek = ["a hidden cave", "an ancient city", "a faraway planet", "a parallel universe", "a promising future"];
 
     function getComplexPrompt() {
         const array = getPrompt(ding, wat, plek);
