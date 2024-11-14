@@ -4,11 +4,11 @@ const promptTextarea = document.getElementById('prompt');
 const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
 const randomPrompt = document.getElementById('createRandomPrompt');
-const promptlist = document.getElementById('promptlist');
+const ulPrompts = document.getElementById('ulPrompts');
 
 async function pull() {
     const data = await fetch('data.json');
-    const json  = data.json();
+    const json = data.json();
     return await json;
 }
 
@@ -32,11 +32,25 @@ askButton.addEventListener('click', () => {
 
 promptTextarea.addEventListener('keyup', (event) => {
     if (event.key == 'Enter') {
-        const data = JSON.parse(localStorage.getItem('promptList')) || [];
-        data.push(promptTextarea.value);
-        localStorage.setItem('promptList', JSON.stringify(data));
+        if (promptTextarea.value === "\n") {
+            alert('Fill in your prompt');
+            event.preventDefault();
+            promptTextarea.value = '';
+        } else {
+            event.preventDefault();
+            const data = JSON.parse(localStorage.getItem('promptList')) || [];
+            data.push(promptTextarea.value);
+            localStorage.setItem('promptList', JSON.stringify(data));
+            ulPrompts.innerHTML = '';
+            data.forEach(prompt => {
+                const li = document.createElement('li');
+                li.style.listStyleType = 'none'
+                li.textContent = prompt;
+                ulPrompts.appendChild(li);
+            });
+            promptTextarea.textContent = '';
+        }
     }
-
 });
 
 randomPrompt.addEventListener('click', () => {
