@@ -84,7 +84,90 @@ async function savePrompt() {
     }
 }
 
+function fetchCategorizedPrompts() {
+    fetch('/BACKEND/api/categorizedPromps.json')
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+    })
+    .then(data => {
+        displayCategorizedPrompts(data.prompts);
+    })
+    .catch((error) => {
+        console.log("Unable to fetch data:", error);
+    });
+}
+
+function displayCategorizedPrompts(prompts) {
+    const showPrompts = document.getElementById('showCategorized');
+    showPrompts.innerHTML = "";
+
+    const categorySelect = document.getElementById('categorySelect');
+    const uniqueCategories = getUniqueCategories(prompts);
+    
+    uniqueCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        option.classList.add('text-gray-400')
+        categorySelect.appendChild(option);
+    });
+
+    const table = document.createElement('table');
+    table.classList.add('table-auto', 'w-full', "border-collapse", "border", 'border-slate-500');  
+
+    const headerRow = document.createElement('tr');
+    headerRow.classList.add('text-xl', "bg-gray-700");
+
+    headerRow.innerHTML = `
+        <thead>
+            <th class="w-[70%] border border-slate-600 px-6 py-3 text-gray-400">Content</th>
+            <th class="w-[15%] border border-slate-600 text-gray-400 px-6 py-3">Category</th>
+            <th class="w-[15%] border border-slate-600 text-gray-400 px-6 py-3">Genre</th>
+        </thead>
+    `;
+    table.appendChild(headerRow);
+
+    prompts.forEach(prompt => {
+        const row = document.createElement('tr');
+        row.classList.add('bg-gray-800');
+        row.setAttribute('data-category', prompt.category);  
+
+        row.innerHTML = `
+            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.content} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.category} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.genre} </td>
+        `;
+        table.appendChild(row);
+    });
+
+    showPrompts.appendChild(table);
+
+    categorySelect.addEventListener('change', (e) => {
+        const selectedCategory = e.target.value;
+        filterByCategory(prompts, selectedCategory);
+    });
+}
+
+function filterByCategory(prompts, category) {
+    const rows = document.querySelectorAll('tr[data-category]');
+    rows.forEach(row => {
+        if (category === "" || row.getAttribute('data-category').toLowerCase() === category.toLowerCase()) {
+            row.style.display = '';  
+        } else {
+            row.style.display = 'none';  
+        }
+    });
+}
+
+function getUniqueCategories(prompts) {
+    const categories = prompts.map(prompt => prompt.category);
+    return [...new Set(categories)]; 
+}
+
 saveButton.addEventListener('click', savePrompt);
 
-fetchPromptData();
+fetchCategorizedPrompts()
 displayPromptChats();

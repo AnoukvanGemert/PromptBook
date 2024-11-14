@@ -1,0 +1,114 @@
+{
+    "prompts": [
+        {
+            "id": 1,
+            "content": "Write a story about a duck",
+            "category": "writing",
+            "genre": "animal"
+        },
+        {
+            "id": 2,
+            "content": "Describe a character who receives a letter with no return address and a single cryptic line inside: 'You owe me.' What do they think it means?",
+            "category": "writing",
+            "genre": "mystery"
+        },
+        {
+            "id": 3,
+            "content": "Write a story about a detective who solves crimes based on smells they can sense at each crime scene.",
+            "category": "writing",
+            "genre": "mystery"
+        },
+        {
+            "id": 4,
+            "content": "Imagine a creature that exists only in your world. Describe what it looks like, sounds like, and where it lives.",
+            "category": "writing",
+            "genre": "fantasy"
+        },
+        {
+            "id": 5,
+            "content": "Describe a first date that is going horribly wrong—until the last five minutes.",
+            "category": "writing",
+            "genre": "romance"
+        },
+        
+        {
+            "id": 6,
+            "content": "Describe a first date that is going horribly wrong—until the last five minutes.",
+            "category": "writing",
+            "genre": "romance"
+        },
+        {
+            "id": 7,
+            "content": "Shows like arcane",
+            "category": "shows",
+            "genre": "action"
+        },
+        {
+            "id": 8,
+            "content": "Movies with rich world-building similar to Avatar",
+            "category": "movies",
+            "genre": "fantasy"
+        },
+        {
+            "id": 9,
+            "content": "Shows featuring morally complex characters like Breaking Bad",
+            "category": "shows",
+            "genre": "drama"
+        },
+        {
+            "id": 10,
+            "content": "Games with immersive storytelling like The Last of Us",
+            "category": "games",
+            "genre": "action-adventure"
+        },
+        {
+            "id": 11,
+            "content": "Podcasts with intriguing true crime stories",
+            "category": "podcasts",
+            "genre": "true crime"
+        },
+        {
+            "id": 12,
+            "content": "Books with intricate fantasy worlds like Game of Thrones",
+            "category": "books",
+            "genre": "fantasy"
+        },
+        {
+            "id": 13,
+            "content": "Animated series with intense action and story depth like Invincible",
+            "category": "shows",
+            "genre": "superhero"
+        },
+        {
+            "id": 14,
+            "content": "Movies exploring dystopian futures like Blade Runner",
+            "category": "movies",
+            "genre": "sci-fi"
+        },
+        {
+            "id": 15,
+            "content": "Games with high-stakes choices and character development like Mass Effect",
+            "category": "games",
+            "genre": "RPG"
+        },
+        {
+            "id": 16,
+            "content": "Shows with complex political themes like The West Wing",
+            "category": "shows",
+            "genre": "political drama"
+        },
+        {
+            "id": 17,
+            "content": "Books with atmospheric horror like Stephen King novels",
+            "category": "books",
+            "genre": "horror"
+        },
+        {
+            "id": 18,
+            "content": "Movies featuring epic battles and kingdoms like Lord of the Rings",
+            "category": "movies",
+            "genre": "fantasy"
+        }
+
+    ]
+}

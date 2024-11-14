@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Prompt Book</title>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="./style.css" />
-</head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1 class="title">AI Prompt Book</h1>
-        <div class="prompt-container">
-            <textarea name="prompt" id="prompt" cols="100" rows="20"></textarea>
-            <div class="buttons">
-                <button id="askChatGPT">Ask ChatGPT</button>
-                <button id="saveNewPrompt">Save as new prompt</button>
-            </div>
-            <div class="buttons">
-                <input type="text" id="storeInput">
-            </div>
-            <ul id="links">
-
-            </ul>
+      <h1 class="title">AI Prompt Book</h1>
+      <div class="prompt-container">
+        <textarea name="prompt" id="prompt" cols="100" rows="20"></textarea>
+        <div class="buttons">
+          <button id="askChatGPT">Ask ChatGPT</button>
+          <button id="saveNewPrompt">Save as new prompt</button>
         </div>
+
+        <div class="mt-10">
+          <div class=" p-3 rounded-lg bg-gray-700 my-2 w-[320px]" id="dropdownCategory">
+            <label for="categorySelect" class="text-gray-300"
+              >Select Category:</label
+            >
+            <select
+              id="categorySelect"
+              class="bg-gray-700 text-white border border-slate-600 px-4 py-2"
+            >
+              <option value="" class="text-gray-300">--Select Category--</option>
+            </select>
+          </div>
+          <div id="showCategorized" class="w-[1100px]"></div>
+        </div>
+
+        <div class="buttons">
+          <input type="text" id="storeInput" />
+        </div>
+        <ul id="links"></ul>
+      </div>
     </div>
     <div class="container-two">
-        <h1 class="title">Add new chat</h1>
-        <form class="formAdd" id="addChat">
-            <label for="Chat">Add a Chat</label>
-            <input type="text" id="AddChat">
-        </form>
+      <h1 class="title">Add new chat</h1>
+      <form class="formAdd" id="addChat">
+        <label for="Chat">Add a Chat</label>
+        <input type="text" id="AddChat" />
+      </form>
     </div>
-</body>
-
+  </body>
 </html>
