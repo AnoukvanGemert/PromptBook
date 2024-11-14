@@ -12,13 +12,27 @@
 <body>
     <div class="container">
         <h1 class="title">Prompt Book</h1>
+        <h2 id="prompt-title"></h2>
         <div class="prompt-container">
             <textarea name="prompt" id="prompt" cols="100" rows="20"></textarea>
             <div class="buttons">
                 <button id="askChatGPT">Ask ChatGPT</button>
                 <button id="saveNewPrompt">Save as new prompt</button>
             </div>
+            <div class="buttons">
+                <input type="text" id="storeInput">
+            </div>
+            <ul id="links">
+
+            </ul>
         </div>
+    </div>
+    <div class="container-two">
+        <h1 class="title">Add new chat</h1>
+        <form class="formAdd" id="addChat">
+            <label for="Chat">Add a Chat</label>
+            <input type="text" id="AddChat">
+        </form>
     </div>
 </body>
 
