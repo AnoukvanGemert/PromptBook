@@ -108,7 +108,18 @@
             "content": "Movies featuring epic battles and kingdoms like Lord of the Rings",
             "category": "movies",
             "genre": "fantasy"
+        },
+        {
+            "id": 19,
+            "content": "Which artist has won the most Grammy's",
+            "category": "music",
+            "genre": "music"
+        },
+        {
+            "id": 20,
+            "content": "Is Beyoncé the queen of pop?",
+            "category": "music",
+            "genre": "music"
         }
-
     ]
 }

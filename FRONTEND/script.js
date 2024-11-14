@@ -132,7 +132,8 @@ function displayCategorizedPrompts(prompts) {
 
     prompts.forEach(prompt => {
         const row = document.createElement('tr');
-        row.classList.add('bg-gray-800');
+        row.classList.add('bg-gray-800' , 'hover:bg-gray-700');
+        
         row.setAttribute('data-category', prompt.category);  
 
         row.innerHTML = `
