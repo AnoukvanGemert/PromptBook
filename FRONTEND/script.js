@@ -100,6 +100,15 @@ function fetchCategorizedPrompts() {
     });
 }
 
+
+function copyToClipboard(value) {
+    navigator.clipboard.writeText(value).then(() => {
+        alert(`The text "${value}" has been copied to your clipboard!`);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
 function displayCategorizedPrompts(prompts) {
     const showPrompts = document.getElementById('showCategorized');
     showPrompts.innerHTML = "";
@@ -137,7 +146,12 @@ function displayCategorizedPrompts(prompts) {
         row.setAttribute('data-category', prompt.category);  
 
         row.innerHTML = `
-            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.content} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-400"> 
+                <div class='text-gray-400 flex justify-between'>
+                    <p class='text-gray-400 w-[80%]' id="textContent">${prompt.content}</p>
+                    <button onclick="copyToClipboard('${prompt.content}')" class="hover:text-gray-300 hover:underline">Copy text</button>
+                </div>
+            </td>
             <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.category} </td>
             <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.genre} </td>
         `;
