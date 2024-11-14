@@ -3,7 +3,6 @@ const promptTitleElement = document.getElementById('prompt-title');
 const promptTextarea = document.getElementById('prompt');
 const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
-const randomPrompt = document.getElementById('createRandomPrompt');
 
 fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
     .then(response => response.json())
@@ -11,11 +10,13 @@ fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
         promptTitleElement.innerText = promptData.title;
         let promptText = '';
         promptData.fragments.forEach(fragment => {
-            promptText += fragment.content;
-            promptText += '\n\n';
+            promptText += fragment.content + '\n\n';
         });
-        promptTextarea.value = promptText;
-    });
+    promptTextarea.value = promptText;
+})
+.catch(error => {
+    console.error('Error fetching prompt data:', error);
+});
 
 askButton.addEventListener('click', () => {
     window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
@@ -102,9 +103,9 @@ saveButton.addEventListener('click', async () => {
             return data
         });
 
-    askButton.addEventListener('click', () => {
-        window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
-    });
+        askButton.addEventListener('click', () => {
+            window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
+        });
 
     fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
         method: 'POST',

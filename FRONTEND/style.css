@@ -8,6 +8,12 @@
 
 body {
     background-color: aliceblue;
+    display: flex;
+    width: 200vw;
+}
+
+.container {
+    width: 100vw;
 }
 
 textarea {
@@ -51,4 +57,26 @@ textarea {
     border-radius: 60px;
     margin-right: 20px;
     background-color: blanchedalmond;
+}
+
+.container-two {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formAdd {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    margin-left: 30px;
+    margin-right: 30px;
+    background-color: aqua;
+}
+
+form * {
+    font-size: 23px;
+    border: none;
+    outline: none;
 }
