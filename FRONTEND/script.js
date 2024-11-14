@@ -14,26 +14,23 @@ fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
         promptData.fragments.forEach(fragment => {
             promptText += fragment.content + '\n\n';
         });
-    promptTextarea.value = promptText;
-})
-.catch(error => {
-    console.error('Error fetching prompt data:', error);
-});
+        promptTextarea.value = promptText;
+    })
+    .catch(error => {
+        console.error('Error fetching prompt data:', error);
+    });
 
 askButton.addEventListener('click', () => {
     window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
 });
 
-function allPrompts() {
-    promptTextarea.addEventListener('keyup', (event) => {
-        if (event.key == 'Enter') {
-            const li = document.createElement('li');
-            promptTextarea.value = li.innerHTML;
-            promptlist.appendChild(li);
-            promptTextarea.value = '';
-        }
-    });
-}
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        const data = JSON.parse(localStorage.getItem('promptList')) || [];
+        data.push(promptTextarea.value);
+        localStorage.setItem('promptList', JSON.stringify(data));
+    }
+});
 
 randomPrompt.addEventListener('click', () => {
     const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
@@ -118,9 +115,9 @@ saveButton.addEventListener('click', async () => {
             return data
         });
 
-        askButton.addEventListener('click', () => {
-            window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
-        });
+    askButton.addEventListener('click', () => {
+        window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
+    });
 
     fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
         method: 'POST',
