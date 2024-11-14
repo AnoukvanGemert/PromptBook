@@ -3,28 +3,22 @@ const promptTitleElement = document.getElementById('prompt-title');
 const promptTextarea = document.getElementById('prompt');
 const askButton = document.getElementById('askChatGPT');
 const saveButton = document.getElementById('saveNewPrompt');
-const outputLinks = document.getElementById('links');
-const input = document.getElementById('storeInput');
+const randomPrompt = document.getElementById('createRandomPrompt');
+const promptlist = document.getElementById('promptlist');
 
-function storePromptChats(SAVED) {
-    localStorage.setItem('prompts', JSON.stringify(SAVED));
-}
-
-async function fetchPromptData() {
-    try {
-        const response = await fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`);
-        const promptData = await response.json();
+fetch(`http://localhost:8000/composite_prompts/${promptId}/expanded`)
+    .then(response => response.json())
+    .then(promptData => {
         promptTitleElement.innerText = promptData.title;
         let promptText = '';
         promptData.fragments.forEach(fragment => {
             promptText += fragment.content + '\n\n';
         });
         promptTextarea.value = promptText;
-
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error fetching prompt data:', error);
-    }
-}
+    });
 
 askButton.addEventListener('click', () => {
     window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
@@ -120,7 +114,7 @@ function displayCategorizedPrompts(prompts) {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
-        option.classList.add('text-gray-400')
+        option.classList.add('text-gray-500')
         categorySelect.appendChild(option);
     });
 
@@ -128,32 +122,32 @@ function displayCategorizedPrompts(prompts) {
     table.classList.add('table-auto', 'w-full', "border-collapse", "border", 'border-slate-500');  
 
     const headerRow = document.createElement('tr');
-    headerRow.classList.add('text-xl', "bg-gray-700");
+    headerRow.classList.add('text-xl', "text-gray-500", "bg-gray-50");
 
     headerRow.innerHTML = `
         <thead>
-            <th class="w-[70%] border border-slate-600 px-6 py-3 text-gray-400">Content</th>
-            <th class="w-[15%] border border-slate-600 text-gray-400 px-6 py-3">Category</th>
-            <th class="w-[15%] border border-slate-600 text-gray-400 px-6 py-3">Genre</th>
+            <th class="w-[70%] border border-slate-600 px-6 py-3 ">Content</th>
+            <th class="w-[15%] border border-slate-600  px-6 py-3">Category</th>
+            <th class="w-[15%] border border-slate-600  px-6 py-3">Genre</th>
         </thead>
     `;
     table.appendChild(headerRow);
 
     prompts.forEach(prompt => {
         const row = document.createElement('tr');
-        row.classList.add('bg-gray-800' , 'hover:bg-gray-700');
+        row.classList.add('bg-gray-100' , 'hover:bg-gray-200');
         
         row.setAttribute('data-category', prompt.category);  
 
         row.innerHTML = `
-            <td class="border border-slate-600 px-6 py-4 text-gray-400"> 
-                <div class='text-gray-400 flex justify-between'>
-                    <p class='text-gray-400 w-[80%]' id="textContent">${prompt.content}</p>
-                    <button onclick="copyToClipboard('${prompt.content}')" class="hover:text-gray-300 hover:underline">Copy text</button>
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> 
+                <div class='text-gray-500 flex justify-between'>
+                    <p class='text-gray-500 w-[80%]' id="textContent">${prompt.content}</p>
+                    <button onclick="copyToClipboard('${prompt.content}')" class="hover:text-gray-700 hover:underline">Copy text</button>
                 </div>
             </td>
-            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.category} </td>
-            <td class="border border-slate-600 px-6 py-4 text-gray-400"> ${prompt.genre} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> ${prompt.category} </td>
+            <td class="border border-slate-600 px-6 py-4 text-gray-500"> ${prompt.genre} </td>
         `;
         table.appendChild(row);
     });
@@ -186,3 +180,109 @@ saveButton.addEventListener('click', savePrompt);
 
 fetchCategorizedPrompts()
 displayPromptChats();
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        const data = JSON.parse(localStorage.getItem('promptList')) || [];
+        data.push(promptTextarea.value);
+        localStorage.setItem('promptList', JSON.stringify(data));
+    }
+});
+
+randomPrompt.addEventListener('click', () => {
+    const ding = ["a guy", "an astronaut", "a detective", "a robot", "someone"];
+    const wat = ["discovers", "explores", "solves", "destroys", "creates", "invents"];
+    const plek = ["a hidden cave", "an ancient city", "a faraway planet", "a parallel universe", "a promising future"];
+
+    function getComplexPrompt() {
+        const array = getPrompt(ding, wat, plek);
+        return `${array[0]} ${array[1]} ${array[2]}.`;
+    }
+
+    let randomDing = 0;
+    let randomWat = 0;
+    let randomPlek = 0;
+
+    function getPrompt(ding, wat, plek) {
+        while (true) {
+            let random = randomInteger(0, ding.length - 1);
+            if (random != randomDing) {
+                randomDing = random;
+                break;
+            }
+        }
+
+        while (true) {
+            let random = randomInteger(0, wat.length - 1);
+            if (random != randomWat) {
+                randomWat = random;
+                break;
+            }
+        }
+
+        while (true) {
+            let random = randomInteger(0, plek.length - 1);
+            if (random != randomPlek) {
+                randomPlek = random;
+                break;
+            }
+        }
+
+        const subject = ding[randomDing];
+        const action = wat[randomWat];
+        const place = plek[randomPlek];
+
+        return [subject, action, place];
+    }
+
+    function randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    promptTextarea.textContent = getComplexPrompt();
+});
+
+
+// Ties zijn code
+saveButton.addEventListener('click', async () => {
+    const newPrompt = await fetch(`http://localhost:8000/composite_prompts`, {
+        method: 'POST',
+        body: JSON.stringify({
+            "author_id": 1,
+            "title": "New Prompt",
+            "description": "default description"
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            return data;
+        });
+    const newFragment = await fetch(`http://localhost:8000/prompt_fragments`, {
+        method: 'POST',
+        body: JSON.stringify({
+            "author_id": 1,
+            "content": promptTextarea.value,
+            "description": "default description fragment",
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            return data
+        });
+
+    askButton.addEventListener('click', () => {
+        window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
+    });
+
+    fetch(`http://localhost:8000/composite_prompts/${newPrompt.id}/fragments/${newFragment.id}`, {
+        method: 'POST',
+        body: JSON.stringify({
+            "order_index": 0
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        });
+});
