@@ -231,7 +231,8 @@ randomPrompt.addEventListener('click', () => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    promptTextarea.textContent = getComplexPrompt();
+    promptTextarea.value = getComplexPrompt();
+    
 });
 
 promptTextarea.addEventListener('keyup', (event) => {
@@ -252,7 +253,7 @@ promptTextarea.addEventListener('keyup', (event) => {
                 li.textContent = prompt;
                 ulPrompts.appendChild(li);
             });
-            promptTextarea.textContent = '';
+            promptTextarea.value = '';
         }
     }
 });
