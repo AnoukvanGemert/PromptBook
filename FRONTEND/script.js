@@ -9,28 +9,39 @@ const date = new Date();
 const time = date.toTimeString();
 const day = date.getDay();
 
-function saving(prompts) {
-    saveButton.addEventListener('click', () => {
-        const table = document.getElementById('rowPrompt');
-        const li = document.createElement('li');
-        li.style.listStyleType = 'none';
-        li.innerHTML = promptTextarea.value;
-        promptTextarea.value = '';
-        prompts.forEach(prompt => {
-            li.setAttribute('data-category', prompt.category);
+async function save(SAVED) {
+    localStorage.setItem('recentPrompts', JSON.stringify(SAVED));
+}
 
-            li.innerHTML = `
+async function pull() {
+    const pulling = await fetch("../BACKEND/API/categorizedPromps.json") || [];
+    const localData = JSON.parse(localStorage.getItem("recentPrompts"));
+    return localData || await pulling.json();
+}
+
+saveButton.addEventListener('click', async () => {
+    const data = await pull();
+    const table = document.getElementById('rowPrompt');
+    const li = document.createElement('li');
+    li.style.listStyleType = 'none';
+    li.innerHTML = promptTextarea.value;
+    promptTextarea.value = '';
+    data.forEach(prompt => {
+        li.setAttribute('data-category', prompt.category);
+
+        li.innerHTML = `
             <p> 
                 <div>
                     <p id="textContent">${prompt.content}  ${prompt.category}  ${prompt.genre}</p>
                 </div>
             </p>
         `;
-            table.appendChild(li);
-        });
-        ulPrompts.appendChild(li);
+        table.appendChild(li);
     });
-}
+    ulPrompts.appendChild(li);
+    save(data);
+    pull();
+});
 
 function fetchCategorizedPrompts() {
     fetch('/BACKEND/api/categorizedPromps.json')
@@ -42,7 +53,6 @@ function fetchCategorizedPrompts() {
         })
         .then(data => {
             displayCategorizedPrompts(data.prompts);
-            saving(data.prompts)
         })
         .catch((error) => {
             console.log("Unable to fetch data:", error);
