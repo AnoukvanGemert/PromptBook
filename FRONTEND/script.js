@@ -12,6 +12,8 @@ const day = date.getDay();
 function saving(prompts) {
     saveButton.addEventListener('click', () => {
         const table = document.getElementById('rowPrompt');
+        console.log(prompts);
+        
         const li = document.createElement('li');
         li.style.listStyleType = 'none';
         li.innerHTML = promptTextarea.value;
@@ -42,13 +44,11 @@ function fetchCategorizedPrompts() {
         })
         .then(data => {
             displayCategorizedPrompts(data.prompts);
-            saving(data.prompts)
         })
         .catch((error) => {
             console.log("Unable to fetch data:", error);
         });
 }
-
 
 function copyToClipboard(value) {
     navigator.clipboard.writeText(value).then(() => {
