@@ -43,6 +43,18 @@ saveButton.addEventListener('click', async () => {
     pull();
 });
 
+askButton.addEventListener('click', () => {
+    window.location.href = `https://chat.openai.com/?q=${promptTextarea.value}`;
+});
+
+promptTextarea.addEventListener('keyup', (event) => {
+    if (event.key == 'Enter') {
+        const data = JSON.parse(localStorage.getItem('promptList')) || [];
+        data.push(promptTextarea.value);
+        localStorage.setItem('promptList', JSON.stringify(data));
+    }
+});
+
 function fetchCategorizedPrompts() {
     fetch('/BACKEND/api/categorizedPromps.json')
         .then((res) => {
@@ -58,7 +70,6 @@ function fetchCategorizedPrompts() {
             console.log("Unable to fetch data:", error);
         });
 }
-
 
 function copyToClipboard(value) {
     navigator.clipboard.writeText(value).then(() => {
